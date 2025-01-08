@@ -1,0 +1,160 @@
+/* fieldset-legend
+// BSD 2-Clause License
+// Copyright (c) Jane Ori, PropJockey, 2025
+*/
+
+@property --fl_px {
+  syntax: "<length>"; initial-value: 0px; inherits: true;
+}
+@property --fl_hw {
+  syntax: "<number>"; initial-value: 0; inherits: true;
+}
+@keyframes --fl_hw {
+  from { --fl_hw: 0; } to { --fl_hw: 1000; }
+}
+@property --fl_hh {
+  syntax: "<number>"; initial-value: 0; inherits: true;
+}
+@keyframes --fl_hh {
+  from { --fl_hh: 0; } to { --fl_hh: 1000; }
+}
+@supports (timeline-scope: --propjockey\\io) and (view-timeline: --propjockey\\io) {
+  :root { --fl-supported: ; --fl-not-supported: initial; }
+  :where(
+    .fieldset-legend,
+    .fieldset-legend-before,
+    .fieldset-legend-after,
+    .fieldset-legend-custom
+  ) {
+    box-sizing: border-box;
+    position: relative;
+    container-type: inline-size;
+    isolation: isolate;
+    --fl-top: initial;
+    --fl-sink: initial;
+    --fl-left: initial;
+    --fl-center: initial;
+    --fl-right: initial;
+    animation: --fl_hw 1ms linear, --fl_hh 1ms linear;
+    animation-timeline: --fl_hw, --fl_hh;
+    animation-range: entry 100% exit 100%;
+    timeline-scope: --fl_hw, --fl_hh;
+    --fl_hwint: calc(1000 / (1000 - var(--fl_hw)) * 10);
+    --fl_hhint: calc(1000 / (1000 - var(--fl_hh)) * 5);
+    margin: 0px;
+    margin-top: calc(var(--fl_hhint) / 2 * 1px - var(--fl-top, 0px));
+    &:not(.fieldset-legend-custom) { visibility: hidden; }
+    &:not(:has(> .fieldset-legend-title)) > :first-child,
+    > .fieldset-legend-title {
+      box-sizing: border-box;
+      margin: 0px;
+    }
+    &::before, &::after, > :not(&) {
+      visibility: visible;
+      --fl_px: 100cqw;
+      --fl_int: calc(1000 * tan(atan2(var(--fl_px), 1000px)));
+      --fl_leftness: 0px;
+      @container style(--fl-left) {
+        --fl_leftness: var(--fl-left);
+      }
+      @container style(--fl-center) {
+        --fl_leftness: calc(
+          50% -
+          ((var(--fl_hwint) / 2) * 1px) +
+          var(--fl-center)
+        );
+      }
+      @container style(--fl-right) {
+        --fl_leftness: calc(
+          100% -
+          (var(--fl_hwint) * 1px) -
+          var(--fl-right)
+        );
+      }
+      --fl-mask: linear-gradient(
+        to right,
+        black 0px var(--fl_leftness),
+        transparent 0px calc(
+          var(--fl_leftness) + (var(--fl_hwint) * 1px)
+        ),
+        black 0px
+      ), linear-gradient(
+        transparent 0px calc(
+          var(--fl-sink,
+            (var(--fl_hhint) / 2) * 1px +
+            var(--fl-top, 0px)
+          )
+        ),
+        black 0px
+      );
+    }
+    &:not(:has(> .fieldset-legend-title)) > :first-child,
+    > .fieldset-legend-title {
+      position: absolute;
+      overflow: hidden;
+      top: var(--fl-top, 0px);
+      left: var(--fl_leftness);
+      transform: translateY(-50%);
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 10px;
+        height: 5px;
+        view-timeline: --fl_hw inline, --fl_hh block;
+      }
+    }
+    &.fieldset-legend::before,
+    &.fieldset-legend-before::before,
+    &.fieldset-legend-after::after {
+      background: inherit;
+      border-radius: inherit;
+      border: inherit;
+      outline: inherit;
+      outline-offset: inherit;
+      content: "";
+      position: absolute;
+      inset: 0px;
+      z-index: -1;
+      -webkit-mask: var(--fl-mask);
+      mask: var(--fl-mask);
+    }
+  }
+}
+@supports not ((timeline-scope: --propjockey\\io) and (view-timeline: --propjockey\\io)) {
+  :root { --fl-supported: initial; --fl-not-supported: ; }
+  :where(
+    .fieldset-legend,
+    .fieldset-legend-before,
+    .fieldset-legend-after,
+    .fieldset-legend-custom
+  ) {
+    position: relative;
+    isolation: isolate;
+    --fl-fallback-title-color: initial;
+    --fl-fallback-title-background: initial;
+  }
+  :is(
+    .fieldset-legend,
+    .fieldset-legend-before,
+    .fieldset-legend-after,
+    .fieldset-legend-custom
+  ):not(:has(> .fieldset-legend-title)) > :first-child {
+    display: block;
+    margin: 0px;
+    color: var(--fl-fallback-title-color, currentColor)!important;
+    background: var(--fl-fallback-title-background, transparent)!important;
+  }
+  :is(
+    .fieldset-legend,
+    .fieldset-legend-before,
+    .fieldset-legend-after,
+    .fieldset-legend-custom
+  ) > .fieldset-legend-title {
+    display: block;
+    margin: 0px;
+    color: var(--fl-fallback-title-color, currentColor)!important;
+    background: var(--fl-fallback-title-background, transparent)!important;
+  }
+}

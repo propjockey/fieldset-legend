@@ -1,0 +1,25 @@
+{
+  "name": "fieldset-legend",
+  "version": "1.0.0",
+  "description": "fieldset legend's border knockout behavior for any elements",
+  "main": "fieldset-legend.css",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/propjockey/fieldset-legend.git"
+  },
+  "keywords": [
+    "fieldset",
+    "legend",
+    "css",
+    "propjockey"
+  ],
+  "author": "Jane Ori",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/propjockey/fieldset-legend/issues"
+  },
+  "homepage": "https://github.com/propjockey/fieldset-legend#readme"
+}
